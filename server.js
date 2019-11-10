@@ -4,8 +4,10 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 
 const products = require('./routes/api/products')
+const users = require('./routes/api/users')
 
 const port = process.env.PORT || 3000
+
 const app = express()
 
 // Middleware
@@ -17,13 +19,15 @@ const db = "mongodb+srv://samilogo:samilogo@telematica-aas7y.mongodb.net/samilog
 mongoose
     .connect(db, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
     })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err))
 
 // Routes
 app.use('/api/products', products)
+app.use('/api/users', users)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
