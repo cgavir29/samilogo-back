@@ -16,13 +16,13 @@ router.post('/', (req, res) => {
     newProduct.save().then(product => res.json(product))
 })
 
-// @route   GET api/books
-// @desc    Gell all books
+// @route   GET api/products
+// @desc    Get all products
 // @access  Public
 router.get('/', (req, res) => {
     Product
         .find()
-        .then(Products => res.json(products))
+        .then(products => res.json(products))
         .catch(err => console.log(err))
 })
 
@@ -34,6 +34,28 @@ router.get('/:id', (req, res) => {
         .findById(req.params.id)
         .then(product => res.json(product))
         .catch(err => console.log(err))
+})
+
+// @route   PUT api/products
+// @desc    Modify a product
+// @access  Public
+router.put('/:id', (req, res) => {
+    Product.findById(req.params.id)
+        .then(product => {
+            product.title = req.body.title
+            product.description = req.body.description
+            product.save().then(product => res.json(product))
+        })
+        .catch(err => console.log(err))
+})
+
+// @route   DELETE api/product
+// @desc    Delete a product
+// @access  Public
+router.delete('/:id', (req, res) => {
+    Product.findById(req.params.id)
+        .then(product => product.remove().then(() => res.json({ success: true })))
+        .catch(err => res.status(404).json({ success: false }))
 })
 
 module.exports = router

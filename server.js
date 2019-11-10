@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 app.use(cors())
 
 // DB Config
-const db = "mongodb+srv://samilogo:samilogo@telematica-aas7y.mongodb.net/test?retryWrites=true&w=majority"
+const db = "mongodb+srv://samilogo:samilogo@telematica-aas7y.mongodb.net/samilogo?retryWrites=true&w=majority"
 mongoose
     .connect(db, {
         useNewUrlParser: true,
