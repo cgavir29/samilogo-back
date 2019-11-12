@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
         description: req.body.description
     })
         .then(product => res.status(201).json(product))
-        .catch(_ => res.status(500).send('There was a problem adding to the database'))
+        .catch(err => res.status(500).send('There was a problem adding to the database'))
 })
 
 // @route   GET api/products
@@ -22,7 +22,7 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
     Product.find()
         .then(products => res.json(products))
-        .catch(_ => res.status(500).send('There was a problem finding the products'))
+        .catch(err => res.status(500).send('There was a problem finding the products'))
 })
 
 // @route   GET api/products
@@ -70,9 +70,9 @@ router.delete('/:id', (req, res) => {
             }
 
             product.remove()
-            res.status(200).send(`Product: "${product.title}" was deleted.`)
+            res.status(200).send(`Product: "${product.title}" was deleted`)
         })
-        .catch(_ => res.status(500).send('There was a problem deleting the product'))
+        .catch(err => res.status(500).send('There was a problem deleting the product'))
 })
 
 module.exports = router
