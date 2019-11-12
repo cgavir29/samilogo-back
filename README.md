@@ -1,4 +1,4 @@
 # Samilogo's Backend
 
-## Para Correrlo
+## To Run
 `npm start`
