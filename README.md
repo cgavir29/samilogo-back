@@ -1,4 +1,7 @@
 # Samilogo's Backend
 
-## To Run
+## Install Dependencies
+`npm install`
+
+## Run
 `npm start`
