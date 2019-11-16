@@ -6,73 +6,69 @@ const Product = require('../../models/product')
 
 // @route   POST api/products
 // @desc    Create a product
-// @access  Public
+// @access  Private
 router.post('/', (req, res) => {
     Product.create({
         title: req.body.title,
         description: req.body.description
     })
         .then(product => res.status(201).json(product))
-        .catch(err => res.status(500).send('There was a problem adding to the database'))
+        .catch(err => res.status(500).send(err))
 })
 
 // @route   GET api/products
 // @desc    Get all products
 // @access  Public
 router.get('/', (req, res) => {
-    Product.find()
-        .then(products => res.json(products))
-        .catch(err => res.status(500).send('There was a problem finding the products'))
+    Product.find((err, products) => {
+        if (err) return res.status(500).send(err)
+        return res.status(200).send(products)
+    })
 })
 
 // @route   GET api/products
 // @desc    Get a product
 // @access  Public
 router.get('/:id', (req, res) => {
-    Product.findById(req.params.id)
-        .then(product => {
-            if (!product) {
-                return res.status(404).send('Product not found')
-            }
-
-            res.json(product)
-        })
-        .catch(err => res.status(500).send('There was a problem finding the product'))
+    Product.findById(req.params.id, (err, product) => {
+        if (err) return res.status(500).send(err)
+        if (!product) {
+            return res.status(404).send('Product not found')
+        }
+        return res.status(200).send(product)
+    })
 })
 
 // @route   PUT api/products
 // @desc    Modify a product
-// @access  Public
+// @access  Private
 router.put('/:id', (req, res) => {
-    Product.findById(req.params.id)
-        .then(product => {
-            if (!product) {
-                return res.status(404).send('Product not found')
-            }
-
-            product.title = req.body.title
-            product.description = req.body.description
-            product.save()
-
-            res.json(product)
-        })
-        .catch(err => res.status(500).send('There was a problem updating the product'))
+    Product.findByIdAndUpdate(req.params.id, {
+        $set: {
+            'title': req.body.title,
+            'description': req.body.description
+        },
+        $push: { 'reviews': req.body.review }
+    }, { upsert: true }, (err, product) => {
+        if (err) return res.status(500).send(err)
+        if (!product) {
+            return res.status(404).send('Product not found')
+        }
+        return res.status(200).send(product)
+    })
 })
 
 // @route   DELETE api/product
 // @desc    Delete a product
-// @access  Public
+// @access  Private
 router.delete('/:id', (req, res) => {
-    Product.findById(req.params.id)
-        .then(product => {
-            if (!product) {
-                return res.status(404).send('Product not found')
-            }
-
-            product.remove()
-            res.status(200).send(`Product: "${product.title}" was deleted`)
-        })
-        .catch(err => res.status(500).send('There was a problem deleting the product'))
+    Product.findByIdAndDelete(req.params.id, (err, product) => {
+        if (err) return res.status(500).send(err)
+        if (!product) {
+            return res.status(404).send('Product not found')
+        }
+        return res.status(200).send('Product successfully deleted')
+    })
 })
 
 module.exports = router

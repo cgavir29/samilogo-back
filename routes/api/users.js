@@ -18,71 +18,57 @@ router.post('/', (req, res) => {
         isAdmin: req.body.isAdmin,
     })
         .then(user => res.status(201).json(user))
-        .catch(err => res.status(500).send('There was a problem adding to the database'))
+        .catch(err => res.status(500).send(err))
 })
 
 // @route   GET api/users
 // @desc    Get all users
 // @access  Private
 router.get('/', (req, res) => {
-    User.find()
-        .then(users => res.json(users))
-        .catch(err => res.status(500).send('There was a problem finding the users'))
+    User.find((err, user) => {
+        if (err) return res.status(500).send(err)
+        return res.status(200).send(user)
+    })
 })
 
 // @route   GET api/users
 // @desc    Get a user
 // @access  Private
 router.get('/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then(user => {
-            if (!user) {
-                return res.status(404).send('User not found')
-            }
-
-            res.json(user)
-        })
-        .catch(err => res.status(500).send('There was a problem finding the user'))
+    User.findById(req.params.id, (err, user) => {
+        if (err) return res.status(500).send(err)
+        if (!user) {
+            return res.status(404).send('User not found')
+        }
+        return res.status(200).send(user)
+    })
 })
 
 // @route   PUT api/users
 // @desc    Modify a user
 // @access  Private
 router.put('/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then(user => {
+    User.findByIdAndUpdate(req.params.id, req.body, { new: true },
+        (err, user) => {
+            if (err) return res.status(500).send(err)
             if (!user) {
-                return res.status(400).send('User not found')
+                return res.status(404).send('User not found')
             }
-
-            user.name = req.body.name
-            user.email = req.body.email
-            user.password = req.body.password
-            user.age = req.body.age
-            user.city = req.body.city
-            user.address = req.body.address
-            user.isAdmin = req.body.isAdmin
-            user.save()
-
-            res.json(user)
+            return res.status(200).send(user)
         })
-        .catch(err => res.status(500).send('There was a problem updating the user'))
 })
 
 // @route   DELETE api/users
 // @desc    Delete a user
 // @access  Private
 router.delete('/:id', (req, res) => {
-    User.findById(req.params.id)
-        .then(user => {
-            if (!user) {
-                return res.status(404).send('User not found')
-            }
-
-            user.remove()
-            res.status(200).send(`User: "${user.name}" was deleted`)
-        })
-        .catch(err => res.status(500).send('There was a problem deleting the user'))
+    User.findByIdAndDelete(req.params.id, (err, user) => {
+        if (err) return res.status(500).send(err)
+        if (!user) {
+            return res.status(404).send('User not found')
+        }
+        return res.status(200).send('User successfully deleted')
+    })
 })
 
 module.exports = router
