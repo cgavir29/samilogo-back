@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 
 const UserSchema = new mongoose.Schema({
     name: {
@@ -18,7 +16,6 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minLength: 3
     },
     age: {
         type: Number,
@@ -33,7 +30,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    isAdmin: Boolean,
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 })
 
 // Generate AuthToken

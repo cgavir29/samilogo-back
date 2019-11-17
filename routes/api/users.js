@@ -1,4 +1,5 @@
 const express = require('express')
+const bcrypt = require('bcryptjs')
 const router = express.Router()
 
 // User Model
@@ -8,10 +9,12 @@ const User = require('../../models/user')
 // @desc    Create a user
 // @access  Private
 router.post('/', (req, res) => {
+    const hashedPassword = bcrypt.hashSync(req.body.password)
+
     User.create({
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password,
+        password: hashedPassword,
         age: req.body.age,
         city: req.body.city,
         address: req.body.address,
@@ -48,7 +51,11 @@ router.get('/:id', (req, res) => {
 // @desc    Modify a user
 // @access  Private
 router.put('/:id', (req, res) => {
-    User.findByIdAndUpdate(req.params.id, req.body, { new: true },
+    var modifiedUser = User(req.body)
+    modifiedUser._id = req.params.id
+    modifiedUser.password = bcrypt.hashSync(modifiedUser.password)
+
+    User.findByIdAndUpdate(req.params.id, modifiedUser, { new: true },
         (err, user) => {
             if (err) return res.status(500).send(err)
             if (!user) {

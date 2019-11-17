@@ -49,7 +49,7 @@ router.put('/:id', (req, res) => {
             'description': req.body.description
         },
         $push: { 'reviews': req.body.review }
-    }, { upsert: true }, (err, product) => {
+    }, { new: true }, (err, product) => {
         if (err) return res.status(500).send(err)
         if (!product) {
             return res.status(404).send('Product not found')
