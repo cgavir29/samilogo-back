@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const cors = require('cors')
 
+const signin = require('./routes/signin')
+// const register = require('./routes/register')
 const products = require('./routes/api/products')
 const users = require('./routes/api/users')
 
@@ -29,6 +31,8 @@ mongoose
 // Routes
 app.use('/api/products', products)
 app.use('/api/users', users)
+app.use('/signin', signin)
+// app.use('/register', register)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)

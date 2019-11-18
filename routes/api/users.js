@@ -9,12 +9,10 @@ const User = require('../../models/user')
 // @desc    Create a user
 // @access  Private
 router.post('/', (req, res) => {
-    const hashedPassword = bcrypt.hashSync(req.body.password)
-
     User.create({
         name: req.body.name,
         email: req.body.email,
-        password: hashedPassword,
+        password: req.body.password,
         age: req.body.age,
         city: req.body.city,
         address: req.body.address,
