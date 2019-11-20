@@ -44,10 +44,6 @@ router.get('/:id', (req, res) => {
 // @access  Private
 router.put('/:id', (req, res) => {
     Product.findByIdAndUpdate(req.params.id, {
-        $set: {
-            'title': req.body.title,
-            'description': req.body.description
-        },
         $push: { 'reviews': req.body.review }
     }, { new: true }, (err, product) => {
         if (err) return res.status(500).send(err)
