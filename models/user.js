@@ -47,13 +47,6 @@ UserSchema.pre('save', async function(next) {
     next()
 })
 
-// Generate AuthToken
-// UserSchema.methods.generateAuthToken = function () {
-//     // Generate auth token for the user
-//     const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('myprivatekey'));
-//     return token;
-// }
-
 UserSchema.statics.findByCredentials = async (email, password) => {
     // Search for a user that matches email and password
     const user = await User.findOne({ email })

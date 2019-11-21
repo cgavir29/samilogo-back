@@ -7,7 +7,7 @@ const signin = require('./routes/signin')
 const products = require('./routes/api/products')
 const users = require('./routes/api/users')
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8080
 
 const app = express()
 
