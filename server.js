@@ -7,7 +7,7 @@ const signin = require('./routes/signin')
 const products = require('./routes/api/products')
 const users = require('./routes/api/users')
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 5000
 
 const app = express()
 
@@ -32,6 +32,7 @@ app.use('/api/products', products)
 app.use('/api/users', users)
 app.use('/signin', signin)
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`)
-})
+app.listen(port, '172.31.34.245')
+//app.listen(port, () => {
+//    console.log(`Server is running on port ${port}`)
+//})

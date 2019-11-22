@@ -2,7 +2,7 @@
 FROM node:13.1.0
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Move dependencies to workdir
 COPY package*.json ./
@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Port where it runs
-EXPOSE 8080
+EXPOSE 5000
 
 # Command to run server
 CMD [ "npm", "start" ]
